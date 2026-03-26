@@ -15,6 +15,7 @@ type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  if (!slug) return { title: "文章" };
   if (!notionConfigured) return { title: "文章" };
   const post = await getBlogPostBySlug(slug);
   if (!post) return { title: "未找到" };
@@ -25,6 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
+  if (!slug) notFound();
 
   if (!notionConfigured) {
     return (
