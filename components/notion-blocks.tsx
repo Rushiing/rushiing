@@ -1,4 +1,3 @@
-import Image from "next/image";
 import type { BlockWithChildren } from "@/lib/notion";
 import { RichText } from "@/components/rich-text";
 
@@ -100,16 +99,18 @@ function BlockInner({ block }: { block: BlockWithChildren }) {
             : null;
       const caption = block.image?.caption;
       if (!src) return null;
+      const alt = caption?.map((c) => c.plain_text).join("") || "";
       return (
         <figure className="my-8">
-          <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg bg-[var(--color-line)]">
-            <Image
+          {/* 使用原生 img：避免 Next Image 域名白名单遗漏；Notion 签名为短时有效 */}
+          <div className="overflow-hidden rounded-lg bg-[var(--color-line)]">
+            {/* eslint-disable-next-line @next/next/no-img-element -- Notion 任意 CDN / 短时签名 URL */}
+            <img
               src={src}
-              alt={caption?.map((c) => c.plain_text).join("") || ""}
-              fill
-              className="object-contain"
-              sizes="(max-width: 768px) 100vw, 42rem"
-              unoptimized
+              alt={alt}
+              className="max-h-[min(85vh,800px)] w-full object-contain"
+              loading="lazy"
+              decoding="async"
             />
           </div>
           {caption?.length ? (

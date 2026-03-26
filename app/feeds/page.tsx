@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { feedsConfigured, getFeedItems } from "@/lib/notion";
 
 export const metadata: Metadata = {
   title: "Feeds",
 };
 
-export const revalidate = 120;
+export const dynamic = "force-dynamic";
 
 export default async function FeedsPage() {
   if (!feedsConfigured) {
@@ -56,13 +55,13 @@ export default async function FeedsPage() {
             >
               {item.imageUrl && (
                 <div className="relative mb-3 aspect-[4/3] w-full overflow-hidden rounded-lg bg-[var(--color-line)]">
-                  <Image
+                  {/* eslint-disable-next-line @next/next/no-img-element -- Notion 文件 URL，与 next/image 白名单易冲突 */}
+                  <img
                     src={item.imageUrl}
                     alt=""
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    unoptimized
+                    className="absolute inset-0 h-full w-full object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
               )}

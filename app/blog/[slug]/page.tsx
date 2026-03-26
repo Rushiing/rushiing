@@ -9,7 +9,8 @@ import {
   titleFromPage,
 } from "@/lib/notion";
 
-export const revalidate = 120;
+/** 每次请求拉取最新块与图片 URL（Notion 文件签名为短时有效，避免 CDN 缓存过期链） */
+export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ slug: string }> };
 
